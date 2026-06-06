@@ -30,6 +30,7 @@ struct MonitorSectionBar: View {
 
     private var glyph: String {
         switch scope {
+        case .home: Symbols.overview
         case .activity: Symbols.activity
         case .findings: Symbols.findings
         case .inventory: Symbols.inventory

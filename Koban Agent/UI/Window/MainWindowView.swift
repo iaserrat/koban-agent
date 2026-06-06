@@ -10,9 +10,11 @@ struct MainWindowView: View {
     @Bindable var model: MonitorModel
     let data: WindowDataModel
     let configurationStore: ConfigurationStore?
+    let updater: UpdaterModel?
 
     private var rows: [StreamRow] {
-        MonitorRowBuilder.rows(
+        guard model.scope.usesStreamTable else { return [] }
+        return MonitorRowBuilder.rows(
             scope: model.scope,
             data: data.monitorData,
             surfaceFilter: model.surfaceFilter,
@@ -32,11 +34,14 @@ struct MainWindowView: View {
                 isShowingSettings: $model.isShowingSettings,
                 showsSettingsButton: configurationStore != nil,
                 isMonitoring: state.isMonitoring,
+                showsStreamControls: model.scope.usesStreamTable,
                 count: rows.count,
                 noun: model.scope.noun
             )
             if model.isShowingSettings, let configurationStore {
                 SettingsView(store: configurationStore)
+            } else if model.scope == .home {
+                MonitorHomeView(state: state, data: data, updater: updater)
             } else {
                 MonitorSectionBar(
                     scope: model.scope,

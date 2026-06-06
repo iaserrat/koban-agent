@@ -32,7 +32,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @ObservationIgnored private var configurationFileWatcher: ConfigurationFileWatcher?
     private var onboardingStore: OnboardingStore?
     @ObservationIgnored private var menuBar: MenuBarController?
-    @ObservationIgnored private var updater: UpdaterModel?
+    /// Sparkle's updater, shared by the panel footer and the window's home dashboard. Created during
+    /// `installMenuBar` (off the early-return test path) and read by `WindowContentView`.
+    private(set) var updater: UpdaterModel?
     @ObservationIgnored private var windowController: ExtendedWindowController?
     @ObservationIgnored private var onboardingWindowController: OnboardingWindowController?
 
@@ -181,13 +183,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func installMenuBar() {
-        let windowController = ExtendedWindowController(rootView: WindowContentView(appDelegate: self))
-        self.windowController = windowController
-
         // Created here rather than at init so it stays off the early-return test path: building it
-        // starts Sparkle's scheduled update checks, which only make sense for a real launch.
+        // starts Sparkle's scheduled update checks, which only make sense for a real launch. Built
+        // before the window controller so `WindowContentView` can read it for the home dashboard.
         let updater = UpdaterModel()
         self.updater = updater
+
+        let windowController = ExtendedWindowController(rootView: WindowContentView(appDelegate: self))
+        self.windowController = windowController
 
         let panel = MenuBarRootView(state: appState, model: model, updater: updater) { [weak self] in
             self?.menuBar?.dismiss()

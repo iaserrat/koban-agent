@@ -19,7 +19,7 @@ struct MenuBarRootView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            RowButton { open(scope: .activity) } label: {
+            RowButton { open(scope: .home) } label: {
                 StatusHeaderView(state: state)
             }
             .padding(Metrics.spacingMedium)
@@ -92,7 +92,7 @@ struct MenuBarRootView: View {
 
     private var footer: some View {
         VStack(alignment: .leading, spacing: 0) {
-            RowButton { open(scope: .activity) } label: {
+            RowButton { open(scope: .home) } label: {
                 HStack(spacing: Metrics.spacingSmall) {
                     Image(systemName: Symbols.window)
                         .frame(width: Metrics.iconWidth)

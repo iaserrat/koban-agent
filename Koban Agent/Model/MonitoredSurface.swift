@@ -65,4 +65,10 @@ enum MonitoredSurface: String, Codable, CaseIterable, Identifiable {
         case .javascriptPackages, .pythonPackages: "package"
         }
     }
+
+    /// The pluralised item-count label ("3 packages", "1 config item"), shared by the surface row
+    /// and the home dashboard's surface card so the grammar lives in one place.
+    func itemCountText(_ count: Int) -> String {
+        "\(count) \(count == 1 ? itemNoun : itemNoun + "s")"
+    }
 }

@@ -10,6 +10,7 @@ final class AppState {
     private(set) var summaries: [MonitoredSurface: SurfaceSummary] = [:]
     private(set) var recentEvents: [ChangeEvent] = []
     private(set) var findings: [Finding] = []
+    private(set) var syncStatus: SyncStatus = .disabled
     private(set) var readModelError: String?
 
     /// Bumped on every publish so the extended window can re-query the database when the engine
@@ -23,11 +24,13 @@ final class AppState {
     func refresh(
         summaries: [MonitoredSurface: SurfaceSummary],
         events: [ChangeEvent],
-        findings: [Finding]
+        findings: [Finding],
+        syncStatus: SyncStatus = .disabled
     ) {
         self.summaries = summaries
         recentEvents = events
         self.findings = findings
+        self.syncStatus = syncStatus
         readModelError = nil
         revision += 1
     }

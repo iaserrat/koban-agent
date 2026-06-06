@@ -46,6 +46,7 @@ extension MonitorRowBuilder {
         itemsByID: [InventoryItem.ID: InventoryItem]
     ) -> [StreamRow] {
         switch scope {
+        case .home: []
         case .activity: activityRows(data.activity, severityByItem, itemsByID)
         case .findings: findingRows(data.findingGroups, itemsByID)
         case .inventory: inventoryRows(data.inventories, severityByItem)

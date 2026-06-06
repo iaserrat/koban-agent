@@ -8,9 +8,9 @@ import Observation
 @MainActor
 @Observable
 final class MonitorModel {
-    /// The scope the window opens on when nothing deep-links it elsewhere. Deep links
-    /// (`show(scope:)`, `show(surface:)`, `show(finding:)`) override this.
-    var scope: MonitorScope = .inventory
+    /// The scope the window opens on when nothing deep-links it elsewhere: the home dashboard. Deep
+    /// links (`show(scope:)`, `show(surface:)`, `show(finding:)`) override this.
+    var scope: MonitorScope = .home
     var surfaceFilter: MonitoredSurface?
     var searchText: String = ""
     var selection: StreamRow.ID?

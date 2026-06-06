@@ -12,7 +12,8 @@ struct WindowContentView: View {
                 state: appDelegate.appState,
                 model: appDelegate.model,
                 data: data,
-                configurationStore: appDelegate.configurationStore
+                configurationStore: appDelegate.configurationStore,
+                updater: appDelegate.updater
             )
         } else {
             WindowUnavailableView()

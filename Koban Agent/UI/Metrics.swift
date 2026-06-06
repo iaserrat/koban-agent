@@ -100,6 +100,42 @@ enum Metrics {
     static let badgePaddingH: CGFloat = 6
     static let badgePaddingV: CGFloat = 2
 
+    /// The home dashboard ("Overview"): a centred content column holding the status hero, the KPI
+    /// tiles, and the surface grid, over a system strip pinned at the foot.
+    /// The dashboard is fluid (web-app responsive): the content fills the window width down to
+    /// comfortable gutters, capped at `homeContentMaxWidth` so it never sprawls on an ultrawide
+    /// display. The surface grid reflows its column count at the two breakpoints below.
+    static let homeContentMaxWidth: CGFloat = 1180
+    static let homeContentPadding: CGFloat = 28
+    static let homeSectionSpacing: CGFloat = 26
+    static let homeHeroSpacing: CGFloat = 30
+    /// Surface-grid breakpoints, measured on the content width: at or above wide → 4 columns, at or
+    /// above medium → 2, otherwise a single column. The counts divide the eight surfaces evenly so a
+    /// row is never left ragged.
+    static let homeWideBreakpoint: CGFloat = 620
+    static let homeMediumBreakpoint: CGFloat = 380
+    static let homeSurfaceColumnsMedium = 2
+    /// The status hero emblem: the disc, its glyph, the soft glow behind it, the dimmed half of the
+    /// glow's breath (reusing `livePulseSeconds`), and the fill/stroke opacities laid over the tint.
+    static let heroEmblemSize: CGFloat = 108
+    static let heroGlyphSize: CGFloat = 46
+    static let heroGlowSize: CGFloat = 150
+    static let heroGlowBlur: CGFloat = 30
+    static let heroGlowDimOpacity = 0.35
+    static let heroGlowLitOpacity = 0.65
+    static let heroFillOpacity = 0.14
+    static let heroStrokeOpacity = 0.5
+    /// The KPI tiles and surface grid: inter-card spacing, the grid's column count, and a finding
+    /// badge's corner. Tiles and cards reuse the panel corner and surface fill.
+    static let homeCardSpacing: CGFloat = 10
+    static let homeSurfaceColumns = 4
+    /// A surface card's minimum height, so every card in the grid is uniform regardless of whether
+    /// it carries a status line.
+    static let homeSurfaceCardHeight: CGFloat = 92
+    static let homeBadgeCornerRadius: CGFloat = 4
+    /// The system strip at the foot of the dashboard.
+    static let homeStripHeight: CGFloat = 44
+
     /// The extended window's default opening size: it opens the stream, its surface bars, and the
     /// detail panel above their minimums with slack, so the window lands on its intended proportions
     /// rather than pinned to `windowMinWidth`/`windowMinHeight`.

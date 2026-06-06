@@ -9,6 +9,9 @@ struct MonitorToolbar: View {
     @Binding var isShowingSettings: Bool
     let showsSettingsButton: Bool
     let isMonitoring: Bool
+    /// Whether the current scope drives the stream table. The home dashboard has no table, so it
+    /// hides the row count and the search field while keeping the scope switch and live state.
+    let showsStreamControls: Bool
     let count: Int
     let noun: String
 
@@ -26,8 +29,10 @@ struct MonitorToolbar: View {
                 MonitorScopePicker(scope: $scope)
                 Spacer(minLength: Metrics.spacingMedium)
                 live
-                count(count, noun)
-                search
+                if showsStreamControls {
+                    count(count, noun)
+                    search
+                }
             }
             if showsSettingsButton {
                 settingsButton

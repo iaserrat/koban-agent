@@ -4,6 +4,7 @@ import Foundation
 /// sidebar's sections - the same dense table re-queries itself per scope rather than each scope
 /// owning a separate column layout.
 enum MonitorScope: String, CaseIterable, Identifiable {
+    case home
     case inventory
     case activity
     case findings
@@ -12,9 +13,16 @@ enum MonitorScope: String, CaseIterable, Identifiable {
         rawValue
     }
 
+    /// Whether this scope draws the dense stream table. The home dashboard is a bespoke overview, so
+    /// it has no table, count, or search; the other scopes share the one filtered table.
+    var usesStreamTable: Bool {
+        self != .home
+    }
+
     /// The section bar's heading for this scope.
     var title: String {
         switch self {
+        case .home: "Overview"
         case .activity: "All activity"
         case .findings: "Findings"
         case .inventory: "Inventory"
@@ -24,6 +32,7 @@ enum MonitorScope: String, CaseIterable, Identifiable {
     /// What the toolbar counts ("142 changes"), pluralised by the caller against the row count.
     var noun: String {
         switch self {
+        case .home: ""
         case .activity: "changes"
         case .findings: "findings"
         case .inventory: "items"
@@ -33,6 +42,7 @@ enum MonitorScope: String, CaseIterable, Identifiable {
     /// The toolbar's tab label.
     var label: String {
         switch self {
+        case .home: "Overview"
         case .activity: "Activity"
         case .findings: "Findings"
         case .inventory: "Inventory"
@@ -40,9 +50,12 @@ enum MonitorScope: String, CaseIterable, Identifiable {
     }
 
     /// The ordered columns the table draws in this scope. Exactly one column is flexible (`width`
-    /// nil) and absorbs the remaining width; the rest are fixed from `Metrics`.
+    /// nil) and absorbs the remaining width; the rest are fixed from `Metrics`. The home dashboard
+    /// draws no table, so it has no columns.
     var columns: [StreamColumn] {
         switch self {
+        case .home:
+            []
         case .activity:
             [
                 StreamColumn(kind: .time, title: "Time", width: Metrics.streamTimeWidth),

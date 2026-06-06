@@ -13,35 +13,13 @@ struct SurfaceSummaryRow: View {
                 .foregroundStyle(Palette.ink)
             Spacer()
             VStack(alignment: .trailing, spacing: 0) {
-                Text(countText)
+                Text(surface.itemCountText(summary?.itemCount ?? 0))
                     .font(.callout)
                     .monospacedDigit()
                     .foregroundStyle(Palette.inkMuted)
-                secondaryLine
+                SurfaceStatusLine(summary: summary)
                     .font(.caption2)
             }
         }
-    }
-
-    /// The single line under the count: the most urgent active state, or the last change time
-    /// when nothing needs attention.
-    @ViewBuilder private var secondaryLine: some View {
-        if summary?.healthState == .degraded {
-            Text(SurfaceHealthLabels.degraded).foregroundStyle(Palette.critical)
-        } else if summary?.healthState == .stale {
-            Text(SurfaceHealthLabels.stale).foregroundStyle(Palette.alertInk)
-        } else if summary?.hasPendingScan == true {
-            Text(SurfaceHealthLabels.queued).foregroundStyle(Palette.alertInk)
-        } else if summary?.isScanRunning == true {
-            Text(SurfaceHealthLabels.scanning).foregroundStyle(Palette.accent)
-        } else if let lastChange = summary?.lastChange {
-            Text(lastChange, format: .relative(presentation: .named)).foregroundStyle(Palette.inkSubtle)
-        }
-    }
-
-    private var countText: String {
-        let count = summary?.itemCount ?? 0
-        let noun = count == 1 ? surface.itemNoun : surface.itemNoun + "s"
-        return "\(count) \(noun)"
     }
 }

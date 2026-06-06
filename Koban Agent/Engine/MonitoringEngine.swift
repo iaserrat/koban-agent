@@ -70,9 +70,9 @@ actor MonitoringEngine {
         health = healthStore
         watchHealth = WatchHealthRecorder(health: healthStore, now: runtime.now)
         collectors = madeCollectors
-        publisher = MonitoringPublisher(
-            readModels: ReadModelStore(database: database),
-            summaryFactory: SurfaceSummaryFactory.live(configuration: configuration),
+        publisher = Self.makePublisher(
+            database: database,
+            configuration: configuration,
             collectors: madeCollectors,
             appState: appState
         )
@@ -132,21 +132,6 @@ actor MonitoringEngine {
             Log.engine.error("Rescan of \(surface.rawValue, privacy: .public) failed: \(error).")
         }
         await requestPublish(generation: generation)
-    }
-}
-
-// MARK: - Construction
-
-extension MonitoringEngine {
-    private static func makeCommitStore(
-        database: AppDatabase,
-        configuration: KobanConfiguration
-    ) -> ScanCommitStore {
-        ScanCommitStore(
-            database: database,
-            retention: StorageRetentionPolicy(settings: configuration.persistence),
-            syncSettings: configuration.sync
-        )
     }
 }
 
@@ -231,6 +216,9 @@ extension MonitoringEngine {
         } catch {
             Log.sync.error("Sensor sync failed: \(error).")
         }
+        // Republish so the home dashboard's sync glance reflects the drained (or stuck) outbox
+        // promptly, rather than waiting for the next scan to refresh the published snapshot.
+        await requestPublish(generation: generation)
     }
 
     private func rescanAll(generation: UUID) async {

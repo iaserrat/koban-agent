@@ -13,7 +13,9 @@ struct MonitoringPublisher {
         readModels: ReadModelStore,
         summaryFactory: SurfaceSummaryFactory,
         collectors: [any SurfaceCollector],
-        appState: AppState
+        appState: AppState,
+        syncEnabled: Bool,
+        deviceID: String?
     ) {
         self.summaryFactory = summaryFactory
         self.collectors = collectors
@@ -21,7 +23,9 @@ struct MonitoringPublisher {
         snapshot = {
             try readModels.publishedState(
                 eventLimit: FeedLimits.events,
-                findingLimit: FeedLimits.findings
+                findingLimit: FeedLimits.findings,
+                syncEnabled: syncEnabled,
+                deviceID: deviceID
             )
         }
     }
@@ -58,7 +62,8 @@ struct MonitoringPublisher {
         await appState.refresh(
             summaries: summaries,
             events: snapshot.recentEvents,
-            findings: snapshot.recentFindings
+            findings: snapshot.recentFindings,
+            syncStatus: snapshot.syncStatus
         )
     }
 }

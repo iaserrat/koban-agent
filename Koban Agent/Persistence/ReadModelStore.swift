@@ -6,7 +6,12 @@ struct ReadModelStore {
     let database: AppDatabase
     private let inventorySearch = InventorySearchReadStore()
 
-    func publishedState(eventLimit: Int, findingLimit: Int) throws -> PublishedStateSnapshot {
+    func publishedState(
+        eventLimit: Int,
+        findingLimit: Int,
+        syncEnabled: Bool = false,
+        deviceID: String? = nil
+    ) throws -> PublishedStateSnapshot {
         try database.reader.read { db in
             let events = try ChangeEvent
                 .order(Column(ReadModelQueries.timestamp).desc)
@@ -20,11 +25,12 @@ struct ReadModelStore {
                 .order(Column(ReadModelQueries.surface))
                 .fetchAll(db)
             let counts = try itemCounts(in: db)
-            return PublishedStateSnapshot(
+            return try PublishedStateSnapshot(
                 recentEvents: events,
                 recentFindings: findings,
                 healthBySurface: Dictionary(uniqueKeysWithValues: health.map { ($0.surface, $0) }),
-                itemCountsBySurface: counts
+                itemCountsBySurface: counts,
+                syncStatus: syncStatus(in: db, enabled: syncEnabled, deviceID: deviceID)
             )
         }
     }
