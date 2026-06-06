@@ -1,0 +1,10 @@
+Koban Agent
+Copyright 2026 Ismael Serratos
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product depends on the following third-party software, each fetched via
+Swift Package Manager under its own license:
+
+  - GRDB.swift (https://github.com/groue/GRDB.swift), MIT License.
+  - Yams (https://github.com/jpsim/Yams), MIT License.

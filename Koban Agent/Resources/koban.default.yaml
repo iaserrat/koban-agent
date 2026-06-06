@@ -1,0 +1,933 @@
+# Koban Agent - default configuration.
+#
+# Koban writes this file to ~/.config/koban/koban.yaml on first launch if it is not already
+# there (it never overwrites your edits). Change it there and restart the agent. Anything you
+# omit falls back to these built-in defaults (section-level merge), so a partial file is valid.
+# Koban only ever reports - it never blocks. See CLAUDE.md.
+
+# Watch timing.
+watch:
+  # Coalesce FSEvents bursts for this long before rescanning a surface.
+  debounceMilliseconds: 800
+  # Safety-net rescan of every surface, in case FSEvents drops or coalesces an event.
+  pollIntervalSeconds: 300
+  # Maximum wall-clock time for one collector snapshot before the surface is marked degraded.
+  maxScanWallClockSeconds: 30
+  # Maximum age of the last successful scan before the surface is shown as stale.
+  maxFreshScanAgeSeconds: 900
+  # Bounded project roots used for project-scoped agent and package metadata.
+  projectRoots:
+    - ~/src
+    - ~/Code
+    - ~/Developer
+    - ~/Projects
+  maxDepth: 5
+  excludeDirectories:
+    - .git
+    - node_modules
+    - .venv
+    - venv
+    - __pycache__
+    - .tox
+    - .mypy_cache
+    - .pytest_cache
+    - dist
+    - build
+    - .next
+    - .turbo
+    - .cache
+  # Opt-in targeted scan for known Koban signal names under the home directory.
+  homeSignalScan:
+    enabled: false
+    root: "~"
+    maxDepth: 8
+    followSymlinks: false
+    eventPathFiltering: true
+    initialScanBudget:
+      maxDirectoriesVisited: 50000
+      maxFilesVisited: 250000
+      maxWallClockSeconds: 60
+    signalFileNames:
+      - AGENTS.md
+      - CLAUDE.md
+      - CLAUDE.local.md
+      - .mcp.json
+      - .cursorrules
+      - opencode.json
+      - opencode.jsonc
+      - package-lock.json
+      - npm-shrinkwrap.json
+      - pnpm-lock.yaml
+      - yarn.lock
+      - bun.lock
+      - uv.lock
+      - pyproject.toml
+      - pylock.toml
+    signalFileGlobs:
+      - requirements*.txt
+      - constraints*.txt
+      - "*.rules"
+      - "*.mdc"
+    pruneDirectoryNames:
+      - .git
+      - node_modules
+      - .venv
+      - venv
+      - __pycache__
+      - .tox
+      - .mypy_cache
+      - .pytest_cache
+      - dist
+      - build
+      - .next
+      - .turbo
+      - .cache
+      - Library
+      - Applications
+      - Movies
+      - Music
+      - Pictures
+      - Public
+      - Desktop
+      - Documents
+      - Downloads
+
+# On-disk history retention. Inventory stores current state; event and finding history is bounded.
+persistence:
+  maxStoredEvents: 5000
+  maxStoredFindings: 1000
+
+# Backend sync. Disabled by default so the open-source sensor remains useful without Fleet.
+# Humans configure YAML; enrolled devices receive canonical JSON over the open protocol.
+sync:
+  enabled: false
+  protocol: kobanSensorV1
+  endpoint: null
+  enrollmentToken: null
+  # Development-only fallback for JSON sensor auth when Fleet is not requiring mTLS.
+  sensorToken: null
+  tenantID: null
+  deviceID: null
+  maxBatchBytes: 524288
+  maxBatchEvents: 500
+  checkInIntervalSeconds: 60
+  retryBaseSeconds: 15
+  retryMaxSeconds: 1800
+  outboxMaxBytes: 262144000
+
+# Homebrew surface.
+homebrew:
+  enabled: true
+  # Explicit prefixes to scan. Omit (or null) to auto-detect /opt/homebrew and /usr/local.
+  prefixes: null
+
+# Claude configuration surface.
+claude:
+  enabled: true
+  # Explicit path to .claude.json. Omit (or null) to use ~/.claude.json.
+  configPath: null
+  # Project roots for project .mcp.json, .claude/settings.json, commands, skills, and instructions.
+  # Null means use watch.projectDiscovery.roots.
+  projectRoots: null
+  includeProjectMCP: true
+  includeSettings: true
+  includeAgents: true
+  includeCommands: true
+  includeHooks: true
+  includeSkills: true
+  includePlugins: true
+  includeInstructions: true
+  # Reads /Library/Application Support/ClaudeCode/managed-settings.json only when enabled and readable.
+  includeManagedSettings: false
+
+codex:
+  enabled: true
+  userConfigPath: null
+  profileConfigGlob: null
+  projectRoots: null
+  includeSystemConfig: false
+  includeSkills: true
+  includeHooks: true
+  includeRules: true
+
+pi:
+  enabled: true
+  agentDirectory: null
+  includeSharedGlobalMCP: true
+  includeSharedProjectMCP: true
+  includePiGlobalOverride: true
+  includePiProjectOverride: true
+  includePackages: true
+  includeImports: true
+
+cursor:
+  enabled: true
+  globalMCPPath: null
+  includeGlobalMCP: true
+  includeProjectMCP: true
+  includeRules: true
+  includeLegacyRules: true
+  includeInstructions: true
+
+opencode:
+  enabled: true
+  userConfigDirectory: null
+  projectRoots: null
+  includeGlobal: true
+  includeProject: true
+  includeMCP: true
+  includeAgents: true
+  includeCommands: true
+  includePlugins: true
+  includeInstructions: true
+  includeManagedPreferences: false
+
+javascript:
+  enabled: true
+  projectRoots: null
+  maxDepth: null
+  includeNpm: true
+  includePnpm: true
+  includeYarn: true
+  includeBun: true
+  excludeDirectories: null
+  lockfileNames:
+    - package-lock.json
+    - npm-shrinkwrap.json
+    - pnpm-lock.yaml
+    - yarn.lock
+    - bun.lock
+
+python:
+  enabled: true
+  projectRoots: null
+  maxDepth: null
+  includeUV: true
+  includePyProject: true
+  includeRequirements: true
+  includePylock: true
+  excludeDirectories: null
+  requirementFileGlobs:
+    - requirements*.txt
+    - constraints*.txt
+
+# Heuristic ruleset. Each rule raises a finding when an item on `surface` satisfies `match`
+# under one of its `triggers`. Change triggers are added, modified, and removed. The present
+# trigger evaluates the current inventory on every scan and persists once per item/rule.
+# `match` is one of: always, fieldContainsAny, fieldNotInList, fieldHasURLScheme, flagEquals -
+# over the fields name/version/origin/detail (or the flag installedOnRequest). Override this list
+# to retune, disable, or add rules.
+rules:
+  - id: agent.mcp.new-server
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [mcpServer]
+    severity: notable
+    title: New MCP server
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.mcp.new-server
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [mcpServer]
+    severity: notable
+    title: New MCP server
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.mcp.new-server
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [mcpServer]
+    severity: notable
+    title: New MCP server
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.mcp.new-server
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [mcpServer]
+    severity: notable
+    title: New MCP server
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.mcp.new-server
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [mcpServer]
+    severity: notable
+    title: New MCP server
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.ephemeral-runner
+    surface: claudeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [npx, uvx, bunx, pnpm dlx]
+    severity: notable
+    title: Ephemeral package runner
+    rationale: This agent configuration launches via an on-the-fly runner that executes code downloaded at start time.
+
+  - id: agent.config.ephemeral-runner
+    surface: codexConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [npx, uvx, bunx, pnpm dlx]
+    severity: notable
+    title: Ephemeral package runner
+    rationale: This agent configuration launches via an on-the-fly runner that executes code downloaded at start time.
+
+  - id: agent.config.ephemeral-runner
+    surface: piConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [npx, uvx, bunx, pnpm dlx]
+    severity: notable
+    title: Ephemeral package runner
+    rationale: This agent configuration launches via an on-the-fly runner that executes code downloaded at start time.
+
+  - id: agent.config.ephemeral-runner
+    surface: cursorConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [npx, uvx, bunx, pnpm dlx]
+    severity: notable
+    title: Ephemeral package runner
+    rationale: This agent configuration launches via an on-the-fly runner that executes code downloaded at start time.
+
+  - id: agent.config.ephemeral-runner
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [npx, uvx, bunx, pnpm dlx]
+    severity: notable
+    title: Ephemeral package runner
+    rationale: This agent configuration launches via an on-the-fly runner that executes code downloaded at start time.
+
+  - id: agent.config.suspicious-command
+    surface: claudeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [curl, wget, "| sh", "| bash", "bash -c", "sh -c", eval, base64]
+    severity: suspicious
+    title: Suspicious command
+    rationale: >-
+      This agent configuration contains shell constructs commonly used to fetch and
+      execute remote code.
+
+  - id: agent.config.suspicious-command
+    surface: codexConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [curl, wget, "| sh", "| bash", "bash -c", "sh -c", eval, base64]
+    severity: suspicious
+    title: Suspicious command
+    rationale: >-
+      This agent configuration contains shell constructs commonly used to fetch and
+      execute remote code.
+
+  - id: agent.config.suspicious-command
+    surface: piConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [curl, wget, "| sh", "| bash", "bash -c", "sh -c", eval, base64]
+    severity: suspicious
+    title: Suspicious command
+    rationale: >-
+      This agent configuration contains shell constructs commonly used to fetch and
+      execute remote code.
+
+  - id: agent.config.suspicious-command
+    surface: cursorConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [curl, wget, "| sh", "| bash", "bash -c", "sh -c", eval, base64]
+    severity: suspicious
+    title: Suspicious command
+    rationale: >-
+      This agent configuration contains shell constructs commonly used to fetch and
+      execute remote code.
+
+  - id: agent.config.suspicious-command
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [curl, wget, "| sh", "| bash", "bash -c", "sh -c", eval, base64]
+    severity: suspicious
+    title: Suspicious command
+    rationale: >-
+      This agent configuration contains shell constructs commonly used to fetch and
+      execute remote code.
+
+  - id: agent.config.remote-transport
+    surface: claudeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldHasURLScheme
+    field: detail
+    schemes: [http, https, ws, wss]
+    severity: notable
+    title: Remote configuration endpoint
+    rationale: This agent configuration points at a remote endpoint.
+
+  - id: agent.config.remote-transport
+    surface: codexConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldHasURLScheme
+    field: detail
+    schemes: [http, https, ws, wss]
+    severity: notable
+    title: Remote configuration endpoint
+    rationale: This agent configuration points at a remote endpoint.
+
+  - id: agent.config.remote-transport
+    surface: piConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldHasURLScheme
+    field: detail
+    schemes: [http, https, ws, wss]
+    severity: notable
+    title: Remote configuration endpoint
+    rationale: This agent configuration points at a remote endpoint.
+
+  - id: agent.config.remote-transport
+    surface: cursorConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldHasURLScheme
+    field: detail
+    schemes: [http, https, ws, wss]
+    severity: notable
+    title: Remote configuration endpoint
+    rationale: This agent configuration points at a remote endpoint.
+
+  - id: agent.config.remote-transport
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldHasURLScheme
+    field: detail
+    schemes: [http, https, ws, wss]
+    severity: notable
+    title: Remote configuration endpoint
+    rationale: This agent configuration points at a remote endpoint.
+
+  - id: agent.mcp.dynamic-auth-helper
+    surface: claudeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [headersHelper]
+    severity: notable
+    title: Dynamic MCP auth helper
+    rationale: This MCP server runs a command to generate auth headers.
+
+  - id: agent.mcp.dynamic-auth-helper
+    surface: codexConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [headersHelper]
+    severity: notable
+    title: Dynamic MCP auth helper
+    rationale: This MCP server runs a command to generate auth headers.
+
+  - id: agent.mcp.dynamic-auth-helper
+    surface: piConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [headersHelper]
+    severity: notable
+    title: Dynamic MCP auth helper
+    rationale: This MCP server runs a command to generate auth headers.
+
+  - id: agent.mcp.dynamic-auth-helper
+    surface: cursorConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [headersHelper]
+    severity: notable
+    title: Dynamic MCP auth helper
+    rationale: This MCP server runs a command to generate auth headers.
+
+  - id: agent.mcp.dynamic-auth-helper
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added, modified]
+    match: fieldContainsAny
+    field: detail
+    values: [headersHelper]
+    severity: notable
+    title: Dynamic MCP auth helper
+    rationale: This MCP server runs a command to generate auth headers.
+
+  - id: agent.config.new-hook
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [hook]
+    severity: notable
+    title: New agent hook
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-skill
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [skill]
+    severity: notable
+    title: New agent skill
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-plugin
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [plugin]
+    severity: notable
+    title: New agent plugin
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-command
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [command]
+    severity: notable
+    title: New agent command
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-rule
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [rule]
+    severity: notable
+    title: New agent rule
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-instruction
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [instruction]
+    severity: notable
+    title: New agent instruction
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-settings
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [settings]
+    severity: notable
+    title: New agent setting
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-hook
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [hook]
+    severity: notable
+    title: New agent hook
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-hook
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [hook]
+    severity: notable
+    title: New agent hook
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-hook
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [hook]
+    severity: notable
+    title: New agent hook
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-hook
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [hook]
+    severity: notable
+    title: New agent hook
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-skill
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [skill]
+    severity: notable
+    title: New agent skill
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-skill
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [skill]
+    severity: notable
+    title: New agent skill
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-skill
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [skill]
+    severity: notable
+    title: New agent skill
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-skill
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [skill]
+    severity: notable
+    title: New agent skill
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-plugin
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [plugin]
+    severity: notable
+    title: New agent plugin
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-plugin
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [plugin]
+    severity: notable
+    title: New agent plugin
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-plugin
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [plugin]
+    severity: notable
+    title: New agent plugin
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-plugin
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [plugin]
+    severity: notable
+    title: New agent plugin
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-command
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [command]
+    severity: notable
+    title: New agent command
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-command
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [command]
+    severity: notable
+    title: New agent command
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-command
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [command]
+    severity: notable
+    title: New agent command
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-command
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [command]
+    severity: notable
+    title: New agent command
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-rule
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [rule]
+    severity: notable
+    title: New agent rule
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-rule
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [rule]
+    severity: notable
+    title: New agent rule
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-rule
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [rule]
+    severity: notable
+    title: New agent rule
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-rule
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [rule]
+    severity: notable
+    title: New agent rule
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-instruction
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [instruction]
+    severity: notable
+    title: New agent instruction
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-instruction
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [instruction]
+    severity: notable
+    title: New agent instruction
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-instruction
+    surface: piConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [instruction]
+    severity: notable
+    title: New agent instruction
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-instruction
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [instruction]
+    severity: notable
+    title: New agent instruction
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-settings
+    surface: claudeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [settings]
+    severity: notable
+    title: New agent setting
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-settings
+    surface: codexConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [settings]
+    severity: notable
+    title: New agent setting
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-settings
+    surface: cursorConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [settings]
+    severity: notable
+    title: New agent setting
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: agent.config.new-settings
+    surface: opencodeConfig
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [settings]
+    severity: notable
+    title: New agent setting
+    rationale: A new behavior-affecting agent configuration item was added.
+
+  - id: packages.new-javascript-package
+    surface: javascriptPackages
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [package]
+    severity: info
+    title: New JavaScript package
+    rationale: A new JavaScript package appeared in project dependency metadata.
+
+  - id: packages.new-python-package
+    surface: pythonPackages
+    enabled: true
+    triggers: [added]
+    match: fieldContainsAny
+    field: kind
+    values: [pythonDeclaredRequirement, pythonResolvedPackage, pythonConstraint]
+    severity: info
+    title: New Python package
+    rationale: A new Python package appeared in project dependency metadata.
+
+  - id: homebrew.untrusted-tap
+    surface: homebrew
+    enabled: true
+    triggers: [added, modified]
+    match: fieldNotInList
+    field: origin
+    allowed: [homebrew/core, homebrew/cask]
+    severity: notable
+    title: Third-party tap
+    rationale: This package was installed from a tap other than Homebrew's official core/cask.
+
+  - id: homebrew.unrequested-install
+    surface: homebrew
+    enabled: true
+    triggers: [added]
+    match: flagEquals
+    flag: installedOnRequest
+    expected: false
+    severity: info
+    title: Pulled in as a dependency
+    rationale: This package was not requested explicitly.
