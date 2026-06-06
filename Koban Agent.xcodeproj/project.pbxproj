@@ -1,0 +1,736 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E9E2A7C22FC9285900652A77 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = E9E2A7C12FC9285900652A77 /* GRDB */; };
+		E9E2A7D22FC9285900652A77 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = E9E2A7D12FC9285900652A77 /* Yams */; };
+		E9E2A7E22FC9285900652A77 /* TOMLDecoder in Frameworks */ = {isa = PBXBuildFile; productRef = E9E2A7E12FC9285900652A77 /* TOMLDecoder */; };
+		E9E2A7F22FC9285900652A77 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = E9E2A7F12FC9285900652A77 /* Sparkle */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E9E2A77A2FC9285900652A77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E9E2A7642FC9285800652A77 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E9E2A76B2FC9285800652A77;
+			remoteInfo = "Koban Agent";
+		};
+		E9E2A7842FC9285900652A77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E9E2A7642FC9285800652A77 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E9E2A76B2FC9285800652A77;
+			remoteInfo = "Koban Agent";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E9E2A76C2FC9285800652A77 /* Koban Agent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Koban Agent.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9E2A7792FC9285900652A77 /* Koban AgentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Koban AgentTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9E2A7832FC9285900652A77 /* Koban AgentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Koban AgentUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E9E2A7E32FC9285900652A77 /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+		E9E2A7F32FC9285900652A77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E9E2A76E2FC9285800652A77 /* Koban Agent */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Koban Agent";
+			sourceTree = "<group>";
+		};
+		E9E2A77C2FC9285900652A77 /* Koban AgentTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Koban AgentTests";
+			sourceTree = "<group>";
+		};
+		E9E2A7862FC9285900652A77 /* Koban AgentUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Koban AgentUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E9E2A7692FC9285800652A77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E9E2A7C22FC9285900652A77 /* GRDB in Frameworks */,
+				E9E2A7D22FC9285900652A77 /* Yams in Frameworks */,
+				E9E2A7E22FC9285900652A77 /* TOMLDecoder in Frameworks */,
+				E9E2A7F22FC9285900652A77 /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9E2A7762FC9285900652A77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9E2A7802FC9285900652A77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E9E2A7632FC9285800652A77 = {
+			isa = PBXGroup;
+			children = (
+				E9E2A7E42FC9285900652A77 /* Config */,
+				E9E2A76E2FC9285800652A77 /* Koban Agent */,
+				E9E2A77C2FC9285900652A77 /* Koban AgentTests */,
+				E9E2A7862FC9285900652A77 /* Koban AgentUITests */,
+				E9E2A76D2FC9285800652A77 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E9E2A76D2FC9285800652A77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E9E2A76C2FC9285800652A77 /* Koban Agent.app */,
+				E9E2A7792FC9285900652A77 /* Koban AgentTests.xctest */,
+				E9E2A7832FC9285900652A77 /* Koban AgentUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E9E2A7E42FC9285900652A77 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				E9E2A7E32FC9285900652A77 /* Signing.xcconfig */,
+				E9E2A7F32FC9285900652A77 /* Info.plist */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E9E2A76B2FC9285800652A77 /* Koban Agent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9E2A78D2FC9285900652A77 /* Build configuration list for PBXNativeTarget "Koban Agent" */;
+			buildPhases = (
+				E9E2A7B12FC9285900652A77 /* SwiftLint */,
+				E9E2A7682FC9285800652A77 /* Sources */,
+				E9E2A7692FC9285800652A77 /* Frameworks */,
+				E9E2A76A2FC9285800652A77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E9E2A76E2FC9285800652A77 /* Koban Agent */,
+			);
+			name = "Koban Agent";
+			packageProductDependencies = (
+				E9E2A7C12FC9285900652A77 /* GRDB */,
+				E9E2A7D12FC9285900652A77 /* Yams */,
+				E9E2A7E12FC9285900652A77 /* TOMLDecoder */,
+				E9E2A7F12FC9285900652A77 /* Sparkle */,
+			);
+			productName = "Koban Agent";
+			productReference = E9E2A76C2FC9285800652A77 /* Koban Agent.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E9E2A7782FC9285900652A77 /* Koban AgentTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9E2A7902FC9285900652A77 /* Build configuration list for PBXNativeTarget "Koban AgentTests" */;
+			buildPhases = (
+				E9E2A7752FC9285900652A77 /* Sources */,
+				E9E2A7762FC9285900652A77 /* Frameworks */,
+				E9E2A7772FC9285900652A77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E9E2A77B2FC9285900652A77 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E9E2A77C2FC9285900652A77 /* Koban AgentTests */,
+			);
+			name = "Koban AgentTests";
+			packageProductDependencies = (
+			);
+			productName = "Koban AgentTests";
+			productReference = E9E2A7792FC9285900652A77 /* Koban AgentTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E9E2A7822FC9285900652A77 /* Koban AgentUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9E2A7932FC9285900652A77 /* Build configuration list for PBXNativeTarget "Koban AgentUITests" */;
+			buildPhases = (
+				E9E2A77F2FC9285900652A77 /* Sources */,
+				E9E2A7802FC9285900652A77 /* Frameworks */,
+				E9E2A7812FC9285900652A77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E9E2A7852FC9285900652A77 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E9E2A7862FC9285900652A77 /* Koban AgentUITests */,
+			);
+			name = "Koban AgentUITests";
+			packageProductDependencies = (
+			);
+			productName = "Koban AgentUITests";
+			productReference = E9E2A7832FC9285900652A77 /* Koban AgentUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E9E2A7642FC9285800652A77 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					E9E2A76B2FC9285800652A77 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+					E9E2A7782FC9285900652A77 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = E9E2A76B2FC9285800652A77;
+					};
+					E9E2A7822FC9285900652A77 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = E9E2A76B2FC9285800652A77;
+					};
+				};
+			};
+			buildConfigurationList = E9E2A7672FC9285800652A77 /* Build configuration list for PBXProject "Koban Agent" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E9E2A7632FC9285800652A77;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E9E2A7C02FC9285900652A77 /* XCRemoteSwiftPackageReference "GRDB" */,
+				E9E2A7D02FC9285900652A77 /* XCRemoteSwiftPackageReference "Yams" */,
+				E9E2A7E02FC9285900652A77 /* XCRemoteSwiftPackageReference "TOMLDecoder" */,
+				E9E2A7F02FC9285900652A77 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E9E2A76D2FC9285800652A77 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E9E2A76B2FC9285800652A77 /* Koban Agent */,
+				E9E2A7782FC9285900652A77 /* Koban AgentTests */,
+				E9E2A7822FC9285900652A77 /* Koban AgentUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E9E2A76A2FC9285800652A77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9E2A7772FC9285900652A77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9E2A7812FC9285900652A77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E9E2A7B12FC9285900652A77 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if command -v swiftlint >/dev/null 2>&1; then\n  swiftlint lint --strict\nelse\n  echo \"note: SwiftLint not installed; skipping in-IDE lint. Run 'make lint' or 'brew install swiftlint'.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E9E2A7682FC9285800652A77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9E2A7752FC9285900652A77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E9E2A77F2FC9285900652A77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E9E2A77B2FC9285900652A77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E9E2A76B2FC9285800652A77 /* Koban Agent */;
+			targetProxy = E9E2A77A2FC9285900652A77 /* PBXContainerItemProxy */;
+		};
+		E9E2A7852FC9285900652A77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E9E2A76B2FC9285800652A77 /* Koban Agent */;
+			targetProxy = E9E2A7842FC9285900652A77 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E9E2A78B2FC9285900652A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		E9E2A78C2FC9285900652A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		E9E2A78E2FC9285900652A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					AppIntents,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kobanhq.Koban-Agent";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		E9E2A78F2FC9285900652A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Config/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					AppIntents,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kobanhq.Koban-Agent";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_EXISTENTIAL_ANY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		E9E2A7912FC9285900652A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Koban Agent.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Koban Agent";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					AppIntents,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kobanhq.Koban-AgentTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Koban Agent.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Koban Agent";
+			};
+			name = Debug;
+		};
+		E9E2A7922FC9285900652A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Koban Agent.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Koban Agent";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					AppIntents,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kobanhq.Koban-AgentTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Koban Agent.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Koban Agent";
+			};
+			name = Release;
+		};
+		E9E2A7942FC9285900652A77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				GENERATE_INFOPLIST_FILE = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					AppIntents,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kobanhq.Koban-AgentUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = "Koban Agent";
+			};
+			name = Debug;
+		};
+		E9E2A7952FC9285900652A77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E9E2A7E32FC9285900652A77 /* Signing.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "$(KOBAN_DEVELOPMENT_TEAM)";
+				GENERATE_INFOPLIST_FILE = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					AppIntents,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.kobanhq.Koban-AgentUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = "Koban Agent";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E9E2A7672FC9285800652A77 /* Build configuration list for PBXProject "Koban Agent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9E2A78B2FC9285900652A77 /* Debug */,
+				E9E2A78C2FC9285900652A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9E2A78D2FC9285900652A77 /* Build configuration list for PBXNativeTarget "Koban Agent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9E2A78E2FC9285900652A77 /* Debug */,
+				E9E2A78F2FC9285900652A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9E2A7902FC9285900652A77 /* Build configuration list for PBXNativeTarget "Koban AgentTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9E2A7912FC9285900652A77 /* Debug */,
+				E9E2A7922FC9285900652A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9E2A7932FC9285900652A77 /* Build configuration list for PBXNativeTarget "Koban AgentUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9E2A7942FC9285900652A77 /* Debug */,
+				E9E2A7952FC9285900652A77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E9E2A7C02FC9285900652A77 /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.10.0;
+			};
+		};
+		E9E2A7D02FC9285900652A77 /* XCRemoteSwiftPackageReference "Yams" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jpsim/Yams";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
+		E9E2A7E02FC9285900652A77 /* XCRemoteSwiftPackageReference "TOMLDecoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dduan/TOMLDecoder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.4;
+			};
+		};
+		E9E2A7F02FC9285900652A77 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E9E2A7C12FC9285900652A77 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9E2A7C02FC9285900652A77 /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
+		};
+		E9E2A7D12FC9285900652A77 /* Yams */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9E2A7D02FC9285900652A77 /* XCRemoteSwiftPackageReference "Yams" */;
+			productName = Yams;
+		};
+		E9E2A7E12FC9285900652A77 /* TOMLDecoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9E2A7E02FC9285900652A77 /* XCRemoteSwiftPackageReference "TOMLDecoder" */;
+			productName = TOMLDecoder;
+		};
+		E9E2A7F12FC9285900652A77 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9E2A7F02FC9285900652A77 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = E9E2A7642FC9285800652A77 /* Project object */;
+}

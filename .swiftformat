@@ -1,0 +1,28 @@
+# Koban Agent — SwiftFormat configuration.
+# CI runs `swiftformat --lint .`; unformatted code fails the build. Developers run
+# `make format` (or format-on-save) to fix. See CLAUDE.md.
+
+--swiftversion 6.0
+--maxwidth 110
+--indent 4
+--self remove
+--importgrouping testable-bottom
+--commas inline
+--trailingclosures
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--funcattributes prev-line
+--typeattributes prev-line
+--stripunusedargs closure-only
+
+# Rules we enable on top of the defaults.
+--enable isEmpty
+--enable blankLinesBetweenImports
+--enable wrapMultilineStatementBraces
+--enable redundantType
+--enable sortImports
+--enable markTypes
+
+# Excluded paths.
+--exclude .build,DerivedData,**/*.generated.swift

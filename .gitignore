@@ -1,0 +1,32 @@
+# macOS
+.DS_Store
+
+# Xcode user-specific state (never shared; shared schemes under xcshareddata are kept)
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad
+Config/Signing.local.xcconfig
+
+# Build output
+build/
+DerivedData/
+*.xcarchive
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager (Package.resolved is kept for reproducible dependency versions)
+.build/
+.swiftpm/
+
+# Tooling / local artifacts
+build.log
+*.log
+
+# Editor
+.idea/
+*.swp
+
+.codex/
+.claude/
+.serena/
