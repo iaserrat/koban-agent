@@ -31,6 +31,11 @@ struct EnrollmentStateStore {
         try data.write(to: fileURL, options: .atomic)
     }
 
+    func delete() throws {
+        guard fileManager.fileExists(atPath: fileURL.path) else { return }
+        try fileManager.removeItem(at: fileURL)
+    }
+
     private static func defaultFileURL() -> URL {
         let directory = try? FileManager.default.url(
             for: .applicationSupportDirectory,

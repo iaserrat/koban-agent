@@ -40,4 +40,15 @@ enum Symbols {
     static let addRule = "plus"
     static let deleteRule = "trash"
     static let warning = "exclamationmark.triangle.fill"
+    static let resetSync = "arrow.counterclockwise.circle"
+
+    /// Settings sidebar category glyphs for the non-ecosystem sections. Ecosystems carry their
+    /// monogram chip instead (the brand's stand-in for mismatched service logos), so only the
+    /// pipeline sections and the ruleset need a symbol.
+    static let settingsWatch = "eye"
+    static let settingsRetention = "archivebox"
+    static let settingsSync = "antenna.radiowaves.left.and.right"
+    static let settingsRules = "slider.horizontal.3"
+    /// The Settings page's leading back control, returning the window to the monitor.
+    static let settingsBack = "chevron.left"
 }

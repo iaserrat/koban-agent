@@ -6,6 +6,8 @@ import SwiftUI
 /// `ConfigurationStore`).
 struct SettingsView: View {
     @Bindable var store: ConfigurationStore
+    let resetSyncState: () async throws -> Void
+    let onClose: () -> Void
     @State private var category: SettingsCategory = .watch
 
     var body: some View {
@@ -13,7 +15,7 @@ struct SettingsView: View {
             SettingsSidebar(selection: $category)
             Divider().overlay(Palette.border)
             VStack(spacing: 0) {
-                SettingsHeader(store: store)
+                SettingsHeader(store: store, category: category, onDone: onClose)
                 ScrollView {
                     content
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -22,6 +24,7 @@ struct SettingsView: View {
             }
         }
         .background(Palette.bg)
+        .onExitCommand(perform: onClose)
     }
 
     @ViewBuilder private var content: some View {
@@ -31,7 +34,7 @@ struct SettingsView: View {
         case .retention:
             PersistenceSettingsSection(settings: $store.draft.persistence)
         case .sync:
-            SyncSettingsSection(settings: $store.draft.sync)
+            SyncSettingsSection(settings: $store.draft.sync, resetSyncState: resetSyncState)
         case .homebrew:
             HomebrewSettingsSection(settings: $store.draft.homebrew)
         case .claude:

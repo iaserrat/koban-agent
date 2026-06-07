@@ -34,7 +34,11 @@ struct SyncBootstrapper {
             if let state {
                 effective.sync.tenantID = state.tenantID
                 effective.sync.deviceID = state.deviceID
-                effective = try await remoteConfig.configurationUpdate(from: effective) ?? effective
+                do {
+                    effective = try await remoteConfig.configurationUpdate(from: effective) ?? effective
+                } catch {
+                    Log.sync.error("Remote configuration fetch failed: \(error).")
+                }
             }
             return effective
         } catch {

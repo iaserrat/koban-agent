@@ -20,10 +20,7 @@ struct MonitorToolbar: View {
             brand
             divider
             if isShowingSettings {
-                Text("Settings")
-                    .font(.callout)
-                    .fontWeight(.medium)
-                    .foregroundStyle(Palette.ink)
+                backControl
                 Spacer(minLength: Metrics.spacingMedium)
             } else {
                 MonitorScopePicker(scope: $scope)
@@ -60,6 +57,22 @@ struct MonitorToolbar: View {
                 .font(.headline)
                 .foregroundStyle(Palette.ink)
         }
+    }
+
+    private var backControl: some View {
+        Button {
+            isShowingSettings = false
+        } label: {
+            HStack(spacing: Metrics.spacingTight) {
+                Image(systemName: Symbols.settingsBack)
+                Text("Settings")
+                    .fontWeight(.medium)
+            }
+            .font(.callout)
+            .foregroundStyle(Palette.ink)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     private var settingsButton: some View {

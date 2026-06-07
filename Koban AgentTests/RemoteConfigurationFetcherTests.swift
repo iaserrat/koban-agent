@@ -45,6 +45,30 @@ struct RemoteConfigurationFetcherTests {
     }
 
     @Test
+    func malformedConfigLeavesStoredGenerationUntouched() async throws {
+        try await Fixture.withTemporaryDirectory { directory in
+            let stateURL = directory.appending(component: SensorProtocolConstants.enrollmentStateFileName)
+            try EnrollmentStateStore(fileURL: stateURL).save(enrollmentState())
+            let transport = try QueueTransport(responses: [
+                JSONEncoder().encode(malformedConfigResponse())
+            ])
+            let fetcher = RemoteConfigurationFetcher(
+                client: SyncHTTPClient(transport: transport),
+                stateStore: EnrollmentStateStore(fileURL: stateURL)
+            )
+
+            await #expect(throws: (any Error).self) {
+                _ = try await fetcher.configurationUpdate(from: localConfiguration())
+            }
+
+            // The overlay never applied, so the persisted generation must not advance past nil;
+            // otherwise the next fetch reports this generation and the server withholds the config.
+            let state = try #require(try EnrollmentStateStore(fileURL: stateURL).load())
+            #expect(state.configGeneration == nil)
+        }
+    }
+
+    @Test
     func treatsNullConfigBytesAsEmptyConfigResponse() throws {
         let data = Data(
             """
@@ -85,6 +109,16 @@ struct RemoteConfigurationFetcherTests {
         GetConfigResponse(
             generation: Self.generation,
             configJSON: Data(remoteConfigJSON().utf8),
+            signature: Data()
+        )
+    }
+
+    private func malformedConfigResponse() -> GetConfigResponse {
+        // Non-empty bytes that pass the emptiness guard but fail to decode into a KobanConfiguration,
+        // so RemoteConfigurationOverlay.apply throws while parsing.
+        GetConfigResponse(
+            generation: Self.generation,
+            configJSON: Data("not a configuration".utf8),
             signature: Data()
         )
     }

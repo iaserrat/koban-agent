@@ -13,7 +13,8 @@ struct WindowContentView: View {
                 model: appDelegate.model,
                 data: data,
                 configurationStore: appDelegate.configurationStore,
-                updater: appDelegate.updater
+                updater: appDelegate.updater,
+                resetSyncState: { try await appDelegate.resetSyncStateForSettings() }
             )
         } else {
             WindowUnavailableView()

@@ -11,6 +11,7 @@ struct MainWindowView: View {
     let data: WindowDataModel
     let configurationStore: ConfigurationStore?
     let updater: UpdaterModel?
+    let resetSyncState: () async throws -> Void
 
     private var rows: [StreamRow] {
         guard model.scope.usesStreamTable else { return [] }
@@ -39,7 +40,11 @@ struct MainWindowView: View {
                 noun: model.scope.noun
             )
             if model.isShowingSettings, let configurationStore {
-                SettingsView(store: configurationStore)
+                SettingsView(
+                    store: configurationStore,
+                    resetSyncState: resetSyncState,
+                    onClose: { model.isShowingSettings = false }
+                )
             } else if model.scope == .home {
                 MonitorHomeView(state: state, data: data, updater: updater)
             } else {

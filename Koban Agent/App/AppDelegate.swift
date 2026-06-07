@@ -46,6 +46,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         FileDescriptorLimit.raiseSoftLimitToSystemMaximum()
         // Koban is dark mode only, regardless of the system setting (see CLAUDE.md).
         NSApp.appearance = NSAppearance(named: .darkAqua)
+        // Without a main menu, macOS has nowhere to route the standard editing key equivalents, so
+        // Cmd-C/V/X are dead in every text field (see MainMenu). Install one before any UI shows.
+        NSApp.mainMenu = MainMenu.make()
         startMonitoring()
         installMenuBar()
     }
@@ -89,17 +92,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     /// Applies a locally edited configuration to the running engine: bootstrap it (sync may adjust
     /// it), then restart. Reuses the same stop-and-recreate path as a remote configuration update.
     private func applyLocalConfiguration(_ configuration: KobanConfiguration) async {
-        guard isReloadingConfiguration == false else { return }
+        await runGuardedConfigurationReload {
+            let bootstrapped = await SyncBootstrapper().bootstrap(configuration)
+            await self.restartEngine(with: bootstrapped)
+        }
+    }
+
+    /// Serializes engine restarts so two stop-and-recreate sequences never interleave on the main
+    /// actor (which would leak a still-running engine and double the FSEvents streams). Every
+    /// restart path, local edit, remote push, and sync reset, runs through here. Returns `false`
+    /// when a reload was already applying: coalescing callers ignore it, a user-initiated reset
+    /// surfaces it rather than reporting a success it did not perform.
+    @discardableResult
+    func runGuardedConfigurationReload(_ apply: () async throws -> Void) async rethrows -> Bool {
+        guard isReloadingConfiguration == false else { return false }
         isReloadingConfiguration = true
         defer { isReloadingConfiguration = false }
-
-        let bootstrapped = await SyncBootstrapper().bootstrap(configuration)
-        await restartEngine(with: bootstrapped)
+        try await apply()
+        return true
     }
 
     /// Tears down the running engine and starts a fresh one on `configuration`. The single
     /// stop-and-recreate path shared by local edits and remote configuration updates.
-    private func restartEngine(with configuration: KobanConfiguration) async {
+    func restartEngine(with configuration: KobanConfiguration) async {
         await engine?.stop()
         engine = nil
         await startMonitoring(configuration: configuration)
@@ -164,21 +179,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func reloadRemoteConfiguration() async {
-        guard isReloadingConfiguration == false else { return }
-        isReloadingConfiguration = true
-        defer { isReloadingConfiguration = false }
-
-        let localConfiguration = ConfigurationLoader.load()
-        do {
-            guard let updated = try await RemoteConfigurationFetcher()
-                .configurationUpdate(from: localConfiguration)
-            else {
-                Log.sync.info("Remote configuration update was requested but no new config was returned.")
-                return
+        await runGuardedConfigurationReload {
+            let localConfiguration = ConfigurationLoader.load()
+            do {
+                guard let updated = try await RemoteConfigurationFetcher()
+                    .configurationUpdate(from: localConfiguration)
+                else {
+                    Log.sync.info("Remote configuration update was requested but no new config was returned.")
+                    return
+                }
+                await self.restartEngine(with: updated)
+            } catch {
+                Log.sync.error("Remote configuration reload failed: \(error).")
             }
-            await restartEngine(with: updated)
-        } catch {
-            Log.sync.error("Remote configuration reload failed: \(error).")
         }
     }
 

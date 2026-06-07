@@ -91,6 +91,30 @@ struct SyncBootstrapperTests {
         }
     }
 
+    @Test
+    func existingEnrollmentSurvivesRemoteConfigFailure() async throws {
+        try await Fixture.withTemporaryDirectory { directory in
+            let stateURL = directory.appending(component: SensorProtocolConstants.enrollmentStateFileName)
+            try EnrollmentStateStore(fileURL: stateURL).save(enrollmentState())
+            let bootstrapper = SyncBootstrapper(
+                client: SyncHTTPClient(transport: FailingTransport()),
+                stateStore: EnrollmentStateStore(fileURL: stateURL),
+                identityStore: FakeEnrollmentIdentityStore(),
+                host: HostIdentityProvider(
+                    hostname: { "macbook" },
+                    osVersion: { "15.5" },
+                    hardwareModel: { "MacBookPro" }
+                )
+            )
+
+            let bootstrapped = await bootstrapper.bootstrap(localConfiguration())
+
+            #expect(bootstrapped.sync.tenantID == "tenant-a")
+            #expect(bootstrapped.sync.deviceID == "device-a")
+            #expect(bootstrapped.sync.endpoint == "https://fleet.example.com")
+        }
+    }
+
     private func localConfiguration() -> KobanConfiguration {
         var configuration = DefaultConfiguration.value
         configuration.sync.enabled = true
@@ -178,6 +202,14 @@ private actor QueueTransport: SyncHTTPTransport {
 
     func enrollmentRequest() throws -> EnrollmentRequest {
         try JSONDecoder().decode(EnrollmentRequest.self, from: requests[0])
+    }
+}
+
+// MARK: - FailingTransport
+
+private struct FailingTransport: SyncHTTPTransport {
+    func data(for _: URLRequest) async throws -> (Data, URLResponse) {
+        throw SyncUploadError.serverStatus(SyncBootstrapperTests.statusOK)
     }
 }
 

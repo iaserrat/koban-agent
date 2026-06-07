@@ -28,9 +28,12 @@ struct RemoteConfigurationFetcher {
         )
         guard response.configJSON.isEmpty == false else { return nil }
 
+        // Apply before persisting the generation: a malformed payload must not advance the stored
+        // generation, or the next fetch reports it as current and the server withholds the config.
+        let merged = try RemoteConfigurationOverlay.apply(configJSON: response.configJSON, to: effective)
         var updatedState = state
         updatedState.configGeneration = response.generation
         try stateStore.save(updatedState)
-        return try RemoteConfigurationOverlay.apply(configJSON: response.configJSON, to: effective)
+        return merged
     }
 }
