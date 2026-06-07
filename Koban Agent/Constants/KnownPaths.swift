@@ -31,7 +31,7 @@ enum KnownPaths {
     static let codexSystemConfigPath = "/etc/codex/config.toml"
     static let agentsDirectoryComponent = ".agents"
     static let agentSkillsComponent = "skills"
-    static let codexSkillFileName = "SKILL.md"
+    static let agentSkillFileName = "SKILL.md"
 
     static let homePathPrefix = "~/"
     static let homePath = "~"

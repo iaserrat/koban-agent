@@ -62,6 +62,77 @@ struct ClaudeCustomizationCollectorTests {
         }
     }
 
+    @Test
+    func nestedSkillIsDetectedByDirectoryName() async throws {
+        try await Fixture.withTemporaryDirectory { directory in
+            let configURL = directory.appending(component: ".claude.json")
+            try Data("{}".utf8).write(to: configURL)
+            let skillsURL = directory.appending(path: ".claude/skills")
+            try writeFile(skillsURL.appending(path: "sus-skill/SKILL.md"), contents: "# Sus")
+
+            let collector = ClaudeConfigCollector(
+                configURL: configURL,
+                customizationDirectories: [
+                    ClaudeCustomizationDirectory(url: skillsURL, kind: .skill)
+                ]
+            )
+
+            let snapshot = try await collector.collect()
+
+            let skill = try #require(snapshot.items.first { $0.kind == .skill })
+            #expect(skill.name == "sus-skill")
+            #expect(skill.path.hasSuffix("/sus-skill/SKILL.md"))
+        }
+    }
+
+    @Test
+    func subagentNestedInSubfolderIsDetected() async throws {
+        try await Fixture.withTemporaryDirectory { directory in
+            let configURL = directory.appending(component: ".claude.json")
+            try Data("{}".utf8).write(to: configURL)
+            let agentsURL = directory.appending(path: ".claude/agents")
+            try writeFile(agentsURL.appending(path: "review/reviewer.md"), contents: "# Reviewer")
+
+            let collector = ClaudeConfigCollector(
+                configURL: configURL,
+                customizationDirectories: [
+                    ClaudeCustomizationDirectory(url: agentsURL, kind: .agent)
+                ]
+            )
+
+            let snapshot = try await collector.collect()
+
+            let agent = try #require(snapshot.items.first { $0.kind == .agent })
+            #expect(agent.name == "reviewer.md")
+            #expect(agent.path.hasSuffix("/review/reviewer.md"))
+        }
+    }
+
+    @Test
+    func commandNestedInSubfolderIsIgnored() async throws {
+        try await Fixture.withTemporaryDirectory { directory in
+            let configURL = directory.appending(component: ".claude.json")
+            try Data("{}".utf8).write(to: configURL)
+            let commandsURL = directory.appending(path: ".claude/commands")
+            try writeFile(commandsURL.appending(path: "deploy.md"), contents: "# Deploy")
+            try writeFile(commandsURL.appending(path: "frontend/component.md"), contents: "# Component")
+
+            let collector = ClaudeConfigCollector(
+                configURL: configURL,
+                customizationDirectories: [
+                    ClaudeCustomizationDirectory(url: commandsURL, kind: .command)
+                ]
+            )
+
+            let snapshot = try await collector.collect()
+
+            // Claude Code maps commands by filename only and does not namespace by subfolder,
+            // so a nested file is not a separate command.
+            #expect(snapshot.items.contains { $0.kind == .command && $0.name == "deploy.md" })
+            #expect(snapshot.items.contains { $0.kind == .command && $0.name == "component.md" } == false)
+        }
+    }
+
     private func writeFile(_ url: URL, contents: String) throws {
         try FileManager.default.createDirectory(
             at: url.deletingLastPathComponent(),

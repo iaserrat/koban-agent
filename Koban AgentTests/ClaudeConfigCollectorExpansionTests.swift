@@ -24,7 +24,7 @@ struct ClaudeConfigCollectorExpansionTests {
             #expect(items.contains { $0.kind == .plugin && $0.name == "formatter@team" })
             #expect(items.contains { $0.kind == .plugin && $0.name == "team" })
             #expect(items.contains { $0.kind == .command && $0.name == "fix.md" })
-            #expect(items.contains { $0.kind == .skill && $0.name == "SKILL.md" })
+            #expect(items.contains { $0.kind == .skill && $0.name == "audit" })
             #expect(items.contains { $0.kind == .instruction && $0.name == "CLAUDE.md" })
         }
     }
@@ -57,7 +57,7 @@ struct ClaudeConfigCollectorExpansionTests {
         )
         try writeFile(urls.settingsURL, contents: settingsJSON)
         try writeFile(urls.commandDirectoryURL.appending(path: "fix.md"), contents: "# Fix")
-        try writeFile(urls.skillDirectoryURL.appending(path: "SKILL.md"), contents: "# Audit")
+        try writeFile(urls.skillDirectoryURL.appending(path: "audit/SKILL.md"), contents: "# Audit")
         try writeFile(urls.instructionURL, contents: "# Project instructions")
         return urls
     }

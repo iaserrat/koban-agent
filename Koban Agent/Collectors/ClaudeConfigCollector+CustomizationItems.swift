@@ -1,16 +1,22 @@
 import Foundation
 
 extension ClaudeConfigCollector {
-    func customizationItems() -> (items: [InventoryItem], issues: [CollectorIssue]) {
-        customizationDirectories.reduce(
+    func customizationItems() throws -> (items: [InventoryItem], issues: [CollectorIssue]) {
+        try customizationDirectories.reduce(
             into: (items: [InventoryItem](), issues: [CollectorIssue]())
         ) { result, directory in
             guard FileManager.default.fileExists(atPath: directory.url.path) else { return }
+            // Skills use a directory-per-skill layout (`skills/<name>/SKILL.md`), so they are
+            // discovered by searching for the receipt file.
+            if directory.kind == .skill {
+                try appendSkillItems(directory: directory, result: &result)
+                return
+            }
             var enumerationIssues: [CollectorIssue] = []
             guard let enumerator = FileManager.default.enumerator(
                 at: directory.url,
                 includingPropertiesForKeys: [.isDirectoryKey, .isRegularFileKey],
-                options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants],
+                options: enumerationOptions(for: directory.kind),
                 errorHandler: { url, error in
                     enumerationIssues.append(CollectorIssue(
                         path: url.path,
@@ -32,6 +38,43 @@ extension ClaudeConfigCollector {
                 directory: directory,
                 result: &result
             )
+        }
+    }
+
+    /// Claude Code scans subagents recursively (they may be organized into subfolders), while
+    /// commands are mapped by filename only and are not namespaced by subfolder.
+    private func enumerationOptions(for kind: InventoryKind) -> FileManager.DirectoryEnumerationOptions {
+        var options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsPackageDescendants]
+        if kind != .agent {
+            options.insert(.skipsSubdirectoryDescendants)
+        }
+        return options
+    }
+
+    private func appendSkillItems(
+        directory: ClaudeCustomizationDirectory,
+        result: inout (items: [InventoryItem], issues: [CollectorIssue])
+    ) throws {
+        let search = try AgentConfigFileFinder.files(
+            in: directory.url,
+            named: KnownPaths.agentSkillFileName
+        )
+        result.issues.append(contentsOf: search.issues)
+        for url in search.files {
+            let hash = AgentConfigFileHash.detail(for: url, validator: fileValidator)
+            result.items.append(InventoryItem(
+                surface: surface,
+                kind: directory.kind,
+                name: url.deletingLastPathComponent().lastPathComponent,
+                path: url.path,
+                provenance: Provenance(
+                    origin: ClaudeConfigNames.customizationOrigin,
+                    detail: hash.detail
+                )
+            ))
+            if let issue = hash.issue {
+                result.issues.append(issue)
+            }
         }
     }
 

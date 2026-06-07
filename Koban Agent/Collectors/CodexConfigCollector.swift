@@ -214,7 +214,7 @@ extension CodexConfigCollector {
         ) { result, directory in
             let search = try AgentConfigFileFinder.files(
                 in: directory,
-                named: KnownPaths.codexSkillFileName
+                named: KnownPaths.agentSkillFileName
             )
             result.issues.append(contentsOf: search.issues)
             for url in search.files {

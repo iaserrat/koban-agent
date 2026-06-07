@@ -76,7 +76,7 @@ struct ClaudeConfigCollector: SurfaceCollector {
     func collect() async throws -> CollectorSnapshot {
         let config = try configItems()
         let settings = try settingsItems()
-        let customizations = customizationItems()
+        let customizations = try customizationItems()
         let instructions = instructionItems()
         let plugins = try pluginFileItems()
         let items = config.items

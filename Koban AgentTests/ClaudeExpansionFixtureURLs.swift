@@ -13,7 +13,7 @@ struct ClaudeExpansionFixtureURLs {
         projectConfigURL = directory.appending(path: "repo/.mcp.json")
         settingsURL = directory.appending(path: "repo/.claude/settings.json")
         commandDirectoryURL = directory.appending(path: "repo/.claude/commands")
-        skillDirectoryURL = directory.appending(path: "repo/.claude/skills/audit")
+        skillDirectoryURL = directory.appending(path: "repo/.claude/skills")
         instructionURL = directory.appending(path: "repo/CLAUDE.md")
     }
 }
