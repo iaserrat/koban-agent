@@ -100,39 +100,19 @@ enum Metrics {
     static let badgePaddingH: CGFloat = 6
     static let badgePaddingV: CGFloat = 2
 
-    /// The home dashboard ("Overview"): a centred content column holding the status hero, the KPI
-    /// tiles, and the surface grid, over a system strip pinned at the foot.
-    /// The dashboard is fluid (web-app responsive): the content fills the window width down to
-    /// comfortable gutters, capped at `homeContentMaxWidth` so it never sprawls on an ultrawide
-    /// display. The surface grid reflows its column count at the two breakpoints below.
+    /// The home dashboard ("Overview"): a verdict header over a single list of surfaces, anchored to
+    /// the top of a column that fills the window and is centred once it reaches `homeContentMaxWidth`,
+    /// so it never sprawls on a wide display. The column shares the window chrome's `spacingLarge`
+    /// horizontal gutter so the header and list left-align with the toolbar and the foot strip, with
+    /// `homeContentPadding` top/bottom breathing and `homeSectionSpacing` between header and list.
     static let homeContentMaxWidth: CGFloat = 1180
     static let homeContentPadding: CGFloat = 28
     static let homeSectionSpacing: CGFloat = 26
-    static let homeHeroSpacing: CGFloat = 30
-    /// Surface-grid breakpoints, measured on the content width: at or above wide → 4 columns, at or
-    /// above medium → 2, otherwise a single column. The counts divide the eight surfaces evenly so a
-    /// row is never left ragged.
-    static let homeWideBreakpoint: CGFloat = 620
-    static let homeMediumBreakpoint: CGFloat = 380
-    static let homeSurfaceColumnsMedium = 2
-    /// The status hero emblem: the disc, its glyph, the soft glow behind it, the dimmed half of the
-    /// glow's breath (reusing `livePulseSeconds`), and the fill/stroke opacities laid over the tint.
-    static let heroEmblemSize: CGFloat = 108
-    static let heroGlyphSize: CGFloat = 46
-    static let heroGlowSize: CGFloat = 150
-    static let heroGlowBlur: CGFloat = 30
-    static let heroGlowDimOpacity = 0.35
-    static let heroGlowLitOpacity = 0.65
-    static let heroFillOpacity = 0.14
-    static let heroStrokeOpacity = 0.5
-    /// The KPI tiles and surface grid: inter-card spacing, the grid's column count, and a finding
-    /// badge's corner. Tiles and cards reuse the panel corner and surface fill.
-    static let homeCardSpacing: CGFloat = 10
-    static let homeSurfaceColumns = 4
-    /// A surface card's minimum height, so every card in the grid is uniform regardless of whether
-    /// it carries a status line.
-    static let homeSurfaceCardHeight: CGFloat = 92
-    static let homeBadgeCornerRadius: CGFloat = 4
+    /// The verdict signal: the status glyph beside the headline, and the opacity its lit state
+    /// breathes down to on the live states (reusing `livePulseSeconds`), suppressed under Reduce
+    /// Motion.
+    static let verdictSignalSize: CGFloat = 26
+    static let verdictSignalDimOpacity = 0.45
     /// The system strip at the foot of the dashboard.
     static let homeStripHeight: CGFloat = 44
 
@@ -141,6 +121,12 @@ enum Metrics {
     /// rather than pinned to `windowMinWidth`/`windowMinHeight`.
     static let windowDefaultWidth: CGFloat = 1140
     static let windowDefaultHeight: CGFloat = 720
+
+    /// The extended window's maximum size, holding the 16:10 proportion the minimum and default sizes
+    /// share. Resize and the zoom button are capped here (and full-screen is disabled), so the window
+    /// never grows so wide that the capped content column floats in empty margins.
+    static let windowMaxWidth: CGFloat = 1440
+    static let windowMaxHeight: CGFloat = 900
 
     /// Width of the leading column (labels) in the finding/inventory detail panes.
     static let detailLabelWidth: CGFloat = 130

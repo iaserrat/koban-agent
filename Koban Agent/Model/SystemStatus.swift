@@ -2,7 +2,7 @@ import Foundation
 
 // MARK: - SystemStatus
 
-/// The single birds-eye verdict the home dashboard's hero renders: the fusion of monitoring health
+/// The single birds-eye verdict the home dashboard's header renders: the fusion of monitoring health
 /// and the worst open finding into one answer to "is anything wrong right now?".
 ///
 /// Health gates the verdict. A degraded agent can never claim all-clear, because a stopped watcher

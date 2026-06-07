@@ -50,6 +50,11 @@ final class ExtendedWindowController: NSObject, NSWindowDelegate {
         // (it hugs its content), which is why it keeps `.preferredContentSize`.
         hosting.sizingOptions = [.minSize]
         window.contentViewController = hosting
+        // Cap the content size to a good-proportion maximum, and opt out of full-screen so the green
+        // button zooms to that cap rather than filling the display. Together these keep the window
+        // within sizes where the capped content column reads as deliberate, never adrift in margins.
+        window.contentMaxSize = NSSize(width: Metrics.windowMaxWidth, height: Metrics.windowMaxHeight)
+        window.collectionBehavior = .fullScreenNone
         window.title = "Koban"
         // Let the content fill the whole window and the traffic lights float over it, instead of a
         // separate title-bar strip. All public, documented `NSWindow` API: a full-size content
@@ -61,11 +66,29 @@ final class ExtendedWindowController: NSObject, NSWindowDelegate {
         window.setFrameAutosaveName(WindowID.main)
         window.isReleasedWhenClosed = false
         window.delegate = self
+        // A frame restored by `setFrameAutosaveName` (saved by a build without the cap, or simply
+        // larger than it) is applied through `setFrame`, which bypasses `windowWillResize`. Clamp the
+        // restored size here so the cap also holds on launch, not just during interactive resize.
+        window.setFrame(NSRect(origin: window.frame.origin, size: clamped(window.frame.size)), display: false)
         window.center()
         return window
     }
 
     func windowWillClose(_: Notification) {
         NSApp.setActivationPolicy(.accessory)
+    }
+
+    func windowWillResize(_: NSWindow, to frameSize: NSSize) -> NSSize {
+        clamped(frameSize)
+    }
+
+    /// Hold the window between its minimum and `windowMax*`, keeping the bounded proportion.
+    /// `contentMaxSize` alone is unreliable under a full-size content view hosting SwiftUI, so this is
+    /// the authoritative cap, applied both to live resizes and to a frame restored on launch.
+    private func clamped(_ size: NSSize) -> NSSize {
+        NSSize(
+            width: min(max(size.width, Metrics.windowMinWidth), Metrics.windowMaxWidth),
+            height: min(max(size.height, Metrics.windowMinHeight), Metrics.windowMaxHeight)
+        )
     }
 }

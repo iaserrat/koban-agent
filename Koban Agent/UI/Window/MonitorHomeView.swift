@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// The window's default scope: a birds-eye dashboard. A single colour-coded verdict hero, a row of
-/// KPI tiles, and the surface grid sit in a centred column over the system strip. The verdict fuses
-/// monitoring health with the worst open finding (`SystemStatus`), so the page answers "is anything
-/// wrong?" before the eye moves anywhere else.
+/// The window's default scope: a birds-eye dashboard. One colour-coded verdict answering "is
+/// anything wrong?" sits over a single list of every watched surface, in a top-anchored, centred
+/// column above the system strip. The verdict fuses monitoring health with the worst open finding
+/// (`SystemStatus`), so the page answers the question before the eye moves to the list.
 struct MonitorHomeView: View {
     let state: AppState
     let data: WindowDataModel
@@ -11,63 +11,34 @@ struct MonitorHomeView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            GeometryReader { proxy in
-                ScrollView {
-                    content(columnCount: surfaceColumnCount(for: contentWidth(in: proxy.size.width)))
-                        .frame(maxWidth: Metrics.homeContentMaxWidth)
-                        .padding(Metrics.homeContentPadding)
-                        // Fill the width up to the cap, and centre vertically: with the content
-                        // shorter than the window it sits in the optical middle; otherwise it scrolls.
-                        .frame(maxWidth: .infinity, minHeight: proxy.size.height)
-                }
+            ScrollView {
+                content
+                    .frame(maxWidth: Metrics.homeContentMaxWidth, alignment: .leading)
+                    .padding(.horizontal, Metrics.spacingLarge)
+                    .padding(.vertical, Metrics.homeContentPadding)
+                    .frame(maxWidth: .infinity)
             }
             HomeSystemStrip(syncStatus: state.syncStatus, updater: updater)
         }
         .background(Palette.bg)
     }
 
-    private func content(columnCount: Int) -> some View {
-        VStack(spacing: Metrics.homeSectionSpacing) {
-            HomeStatusHero(
+    private var content: some View {
+        VStack(alignment: .leading, spacing: Metrics.homeSectionSpacing) {
+            HomeVerdictHeader(
                 status: status,
                 findingCount: data.findingGroups.count,
+                totalItemCount: totalItemCount,
                 monitoredSurfaceCount: MonitoredSurface.allCases.count
             )
-            HomeStatsRow(
-                itemCount: totalItemCount,
-                findingCount: data.findingGroups.count,
-                worstSeverity: worstSeverity,
-                monitoredSurfaceCount: MonitoredSurface.allCases.count
-            )
-            surfacesSection(columnCount: columnCount)
+            surfacesSection
         }
     }
 
-    private func surfacesSection(columnCount: Int) -> some View {
+    private var surfacesSection: some View {
         VStack(alignment: .leading, spacing: Metrics.spacingSmall) {
             SectionLabel(title: "Surfaces")
-            HomeSurfaceGrid(
-                columnCount: columnCount,
-                summaries: state.summaries,
-                severityBySurface: severityBySurface
-            )
-        }
-    }
-
-    /// The content's laid-out width: the viewport minus gutters, capped at the max so the grid's
-    /// breakpoints are measured against the width the cards actually get.
-    private func contentWidth(in viewportWidth: CGFloat) -> CGFloat {
-        let capped = min(viewportWidth, Metrics.homeContentMaxWidth)
-        return capped - Metrics.homeContentPadding - Metrics.homeContentPadding
-    }
-
-    private func surfaceColumnCount(for width: CGFloat) -> Int {
-        if width >= Metrics.homeWideBreakpoint {
-            Metrics.homeSurfaceColumns
-        } else if width >= Metrics.homeMediumBreakpoint {
-            Metrics.homeSurfaceColumnsMedium
-        } else {
-            1
+            HomeSurfaceList(summaries: state.summaries, severityBySurface: severityBySurface)
         }
     }
 
@@ -97,7 +68,7 @@ struct MonitorHomeView: View {
         data.inventoryCountsBySurface.values.reduce(0, +)
     }
 
-    /// The worst open severity per surface, used to badge the surface cards.
+    /// The worst open severity per surface, used to flag the surface rows.
     private var severityBySurface: [MonitoredSurface: Severity] {
         data.findingGroups.reduce(into: [:]) { result, group in
             let severity = group.representative.severity

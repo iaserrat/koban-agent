@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// The single line of secondary status for a surface: the most urgent active state, or the last
-/// change time when nothing needs attention. Defined once and rendered in both the menu-bar panel's
-/// `SurfaceSummaryRow` and the home dashboard's `SurfaceSummaryCard`, so the two never drift (see
-/// CLAUDE.md: one component, many contexts).
+/// change time when nothing needs attention. Defined once and rendered inside `SurfaceSummaryRow`,
+/// the shared row the menu-bar panel and the home dashboard's surface list both use, so the two
+/// never drift (see CLAUDE.md: one component, many contexts).
 struct SurfaceStatusLine: View {
     let summary: SurfaceSummary?
 
