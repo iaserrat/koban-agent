@@ -178,8 +178,8 @@ fi
 gh release upload "$UPDATES_TAG" "$DMG_PATH" "${FEED_DIR}/${APPCAST_NAME}" --repo "$GITHUB_REPO" --clobber
 
 # --- 8. Record the version in git ---------------------------------------------------------------
-# Commit only the bumped version file (leaving any unrelated WIP untouched) and tag the release, so
-# git is the record of what shipped. Pushing stays manual: the script never writes to the remote.
+# Commit only the bumped version file (leaving any unrelated WIP untouched), tag the release, and
+# push both to the remote so git is the published record of what shipped.
 TAG="v${VERSION}"
 step "Recording ${VERSION} in git"
 if git diff --quiet -- "$VERSION_XCCONFIG"; then
@@ -195,7 +195,10 @@ else
     printf '  Tagged %s.\n' "$TAG"
 fi
 
+step "Pushing the release commit and tag"
+git push
+git push origin "$TAG"
+
 step "Done. ${APP_NAME} ${VERSION} is live on the Sparkle feed."
 printf '  DMG:     %s%s\n' "$DOWNLOAD_URL_PREFIX" "$DMG_NAME"
 printf '  Appcast: %s%s\n' "$DOWNLOAD_URL_PREFIX" "$APPCAST_NAME"
-printf '\nPush the release commit and tag: git push && git push origin %s\n' "$TAG"
